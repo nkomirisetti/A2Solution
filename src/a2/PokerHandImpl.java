@@ -55,6 +55,7 @@ public class PokerHandImpl implements PokerHand {
 	public boolean isStraight() {
 		
 
+		
 		boolean lmao_what = true;
 		for (int i=0; i<4; i++) {
 			if (c[i].r()+1 != c[i+1].r()) {
@@ -66,11 +67,18 @@ public class PokerHandImpl implements PokerHand {
 	}
 
 	private boolean isTheWheel() {
-		return (c[0].r() == 2 &&
-				c[1].r() == 3 &&
-				c[2].r() == 4 &&
-				c[3].r() == 5 &&
-				c[4].r() == 14);
+		if (c[0].r() == 2) {
+			if (c[1].r() == 3) {
+				if (c[2].r() == 4) {
+					if (c[3].r() == 5) {
+						if (c[4].r() == 14) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean isOnePair() {
@@ -85,10 +93,10 @@ public class PokerHandImpl implements PokerHand {
 
 	public boolean isTwoPair() {
 		
-		int first_pair_idx = find_pair_starting_at(0);
-		int second_pair_idx = find_pair_starting_at(first_pair_idx+2);
+		int firstPairIdx = find_pair_starting_at(0);
+		int second_pairIdx = find_pair_starting_at(firstPairIdx+2);
 
-		return ((first_pair_idx != -1) && (second_pair_idx != -1) && !isFourOfAKind() && !isFullHouse());
+		return ((firstPairIdx != -1) && (second_pairIdx != -1) && !isFourOfAKind() && !isFullHouse());
 	}
 
 	public boolean isThreeOfAKind() {
@@ -122,17 +130,22 @@ public class PokerHandImpl implements PokerHand {
 	}	
 	
 	public boolean isStraightFlush() {
-		return isStraight() && isFlush();
+		if (isStraight() == true) {
+			if (isFlush() == true) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public int getHandRank() {
-		if (isOnePair()) {
+		if (isOnePair() == true) {
 			return c[find_pair_starting_at(0)].r();
-		} else if (isTwoPair()) {
+		} else if (isTwoPair() == true) {
 			return c[3].r();
-		} else if (isThreeOfAKind() || isFourOfAKind() || isFullHouse()) {
+		} else if (isThreeOfAKind() == true || isFourOfAKind() == true || isFullHouse() == true) {
 			return c[2].r();
-		} else if (isTheWheel()) {
+		} else if (isTheWheel() == true) {
 			return 5;
 		} else {
 			return c[4].r();
@@ -158,14 +171,22 @@ public class PokerHandImpl implements PokerHand {
 	public int getHandTypeValue() {
 		
 		if (isStraightFlush()) return 9;
+		
+		
 		if (isOnePair()) return 2;
+		
+		
 		if (isTwoPair()) return 3;
-		if (isThreeOfAKind()) return 4;
+		
+		
+	if (isThreeOfAKind()) return 4;
+		
+		
 		if (isStraight()) return 5;
 		if (isFlush()) return 6;
 		if (isFullHouse()) return 7;
 		if (isFourOfAKind()) return 8;
-		return 1;
+	return 1;
 	}
 	
 	private int find_pair_starting_at(int num) {		
